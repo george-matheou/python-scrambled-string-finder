@@ -12,6 +12,6 @@ install:
 
 lint:
 	@echo "======> Linting using pylint..."
-	pylint --disable=W0107,R0903 --max-line-length=120 --recursive=y --ignore=.venv,docs .
+	pylint --rcfile=pylintrc --recursive=y .
 
 all: tests install lint
