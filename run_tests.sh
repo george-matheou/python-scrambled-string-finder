@@ -1,4 +1,10 @@
 #!/bin/bash
 
-python3 -m unittest -v tests/test_log_config.py
-python3 -m unittest -v tests/test_app_config.py
+echo "================= Testing config..."
+python3 -m unittest discover -v -s ./config/tests/ -p "*.py"
+
+echo "================= Testing utils..."
+python3 -m unittest discover -v -s ./utils/tests/ -p "*.py"
+
+echo "================= Testing app..."
+python3 -m unittest discover -v -s ./tests -p "*.py"
