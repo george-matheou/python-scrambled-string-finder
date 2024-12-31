@@ -1,0 +1,7 @@
+this - ok
+tihs - ok
+tsih - not valid - first and last letter
+siht - not valid - first and last letter
+tis  - not valid
+tiss - not valid
+thiss - not valid

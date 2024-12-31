@@ -5,7 +5,7 @@ Python module that is responsible for managing the log configuration.
 # Imports
 from typing import Literal
 from pydantic import Field, field_validator
-from .config import Config
+from config.config import Config
 
 
 class LogConfig(Config):

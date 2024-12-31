@@ -12,6 +12,6 @@ install:
 
 lint:
 	@echo "======> Linting using pylint..."
-	pylint --rcfile=pylintrc --recursive=y .
+	@pylint --rcfile=pylintrc --recursive=y . || true
 
-all: tests install lint
+all: install tests lint

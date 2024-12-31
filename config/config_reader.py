@@ -12,6 +12,9 @@ from .config import Config
 class ConfigReader:
     """
     Class that is responsible for reading a configuration file.
+
+    Raises:
+        FileNotFoundError: If configuration file does not exist.
     """
     def __init__(self, config_file_path: str):
         if not os.path.exists(config_file_path):
@@ -31,6 +34,9 @@ class ConfigReader:
 
         Returns:
             Config: The configuration object holding the configuration data.
+
+        Raises:
+            ValueError: If section is not found in the configuration file.
         """
         if not self._config.has_section(section):
             raise ValueError(f"Section '{section}' not found in the configuration file.")

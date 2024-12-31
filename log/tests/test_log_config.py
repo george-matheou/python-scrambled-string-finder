@@ -5,7 +5,7 @@ Test cases for LogConfig
 # Imports
 import unittest
 from pydantic import ValidationError
-from config.log_config import LogConfig
+from log.log_config import LogConfig
 
 
 class TestLogConfig(unittest.TestCase):
