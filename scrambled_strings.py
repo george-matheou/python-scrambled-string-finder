@@ -43,20 +43,28 @@ def check_arguments(args, logger: Logger) -> None:
     logger.info(f"Dictionary file path: {dict_file_path}")
     logger.info(f"Input file path: {input_file_path}")
 
+def parse_arguments():
+    """
+    Parses command line arguments.
 
-def main():
+    Returns:
+        argparse.Namespace: An object containing the parsed command-line arguments.
     """
-    Main function to handle command-line arguments and orchestrate the program flow.
-    """
-    # Parse command-line arguments
     parser = argparse.ArgumentParser(description="Scrambled String Finder")
     parser.add_argument("--dictionary", required=True, help="Path to the dictionary file.")
     parser.add_argument("--input", required=True, help="Path to the input file.")
     parser.add_argument("--config", default="config.ini", help="Path to the configuration file (default: config.ini).")
     parser.add_argument("--storage", choices=["hash", "set"], default="hash",
                         help="Type of storage to use for the dictionary.")
+    return parser.parse_args()
 
-    args = parser.parse_args()
+def main():
+    """
+    Main function to handle command-line arguments and orchestrate the program flow.
+    """
+
+    # Parse command-line arguments
+    args = parse_arguments()
     config_file = args.config
     dict_file_path = args.dictionary
     input_file_path = args.input
@@ -95,26 +103,13 @@ def main():
 
         dictionary.load_from_file(dict_file_path)
         logger.info(f"Total length of all dictionary words: {dictionary.total_length_of_all_words}")
-
-        print("====================")
-        for word in dictionary.get_all_words():
-            print(f"{word} -> {dictionary.get_canonical_word(word)}")
-        print("====================")
     except Exception as err:
         logger.error(f"Error loading dictionary: {err}")
         sys.exit(1)
 
     try:
-        input_file_provider = InputFileProvider(
-            input_file_path=input_file_path
-        )
-
+        input_file_provider = InputFileProvider(input_file_path)
         input_file_provider.load()
-
-        # print("====================")
-        # for line in input_file_provider.get():
-        #     print(line)
-        # print("====================")
     except Exception as err:
         logger.error(f"Error loading input file: {err}")
         sys.exit(1)
@@ -126,10 +121,9 @@ def main():
             logger=logger
         )
 
-        scrambled_string_finder.output_scrambled_strings()
-        # print("=====================")
-        # for scrambled_string in scrambled_string_finder.find_scrambled_strings():
-        #     print(scrambled_string)
+        logger.always("\n\n====== Results: ")
+        for case_index, count in scrambled_string_finder.find_scrambled_strings():
+            logger.always(f"Case #{case_index}: {count}")
     except Exception as err:
         logger.error(f"Error finding scrambled strings: {err}")
         sys.exit(1)

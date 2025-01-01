@@ -30,7 +30,7 @@ class InputFileProvider(InputProvider):
             FileNotFoundError: If the input file does not exist.
         """
         if not os.path.exists(self.input_file_path):
-            raise FileNotFoundError(f"Input file path = {self.input_file_path} does not exist!")
+            raise FileNotFoundError(f"Input file '{self.input_file_path}' does not exist!")
 
         # Open the file and read line by line
         with open(self.input_file_path, mode="r", encoding="utf-8") as file:
@@ -42,6 +42,9 @@ class InputFileProvider(InputProvider):
                     continue
 
                 self.inputs.append(clean_line)
+
+        if not self.inputs:
+            raise ValueError(f"Input file '{self.input_file_path}' is empty.")
 
     def get(self) -> List[str]:
         """

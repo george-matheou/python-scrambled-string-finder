@@ -1,10 +1,8 @@
 # pepperstone_code_challenge
-
-- Think about the input file provider because we may have huge files.
+- Limits for input strings
 - Say about linting
 - Fix printing of the output
 - Create docker
-- Documentation with docstrings
 
 ## Missing tests
 - Test inputs

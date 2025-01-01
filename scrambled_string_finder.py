@@ -6,7 +6,7 @@ dictionary words (including their scrambled versions) that appear as substrings
 in input strings.
 """
 
-from typing import List
+from typing import List, Tuple
 from input_provider import InputProvider
 from dictionary.dictionary import Dictionary
 from dictionary.dictionary_utils import compute_canonical_form
@@ -34,50 +34,38 @@ class ScrambledStringFinder:
         self.dictionary = dictionary
         self.logger: Logger = logger
 
-    def find_scrambled_strings(self) -> List[str]:
+    def find_scrambled_strings(self) ->  List[Tuple[int, int]]:
         """
         Finds scrambled substrings in the input strings.
 
         Returns:
-            List[str]: A list of results in the format "Case #x: y", where x is the input
-                       string index (1-based) and y is the count of matched dictionary
-                       words (including scrambled versions).
+                List[Tuple[int, int]]: A list of tuples where each tuple contains:
+                    - The index of the input string (1-based).
+                    The count of matched dictionary words (including scrambled versions).
         """
         inputs = self.input_provider.get()
 
         results = []
         for index, input_string in enumerate(inputs, start=1):
-            result = self._process_input(index, input_string)
-            results.append(result)
+            count = self._process_input(input_string)
+            results.append((index, count))
 
         return results
 
-    def output_scrambled_strings(self) -> None:
-        """
-        Outputs scrambled substrings in the input strings.
-        """
-        inputs = self.input_provider.get()
-
-        for index, input_string in enumerate(inputs, start=1):
-            result = self._process_input(index, input_string)
-            self.logger.always(result)
-
-    def _process_input(self, case_index: int, input_string: str) -> str:
+    def _process_input(self, input_string: str) -> int:
         """
         Processes a single input string to find scrambled strings.
 
         Args:
-            case_index (int): The index of the case (1-based).
             input_string (str): The input string to process.
 
         Returns:
-            str: The result in the format "Case #x: y".
+            int: The count of matched scrambled words.
         """
         if not input_string:
-            return f"Case #{case_index}: 0"
+            return 0
 
-        count = self._count_matches(input_string)
-        return f"Case #{case_index}: {count}"
+        return self._count_matches(input_string)
 
     def _count_matches(self, input_string: str) -> int:
         """
