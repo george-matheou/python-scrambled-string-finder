@@ -1,25 +1,21 @@
 # pepperstone_code_challenge
 
-- Limits for input strings
+- Fix printing of the output?
+- Limits for input strings?
 - Say about linting
-- Fix printing of the output
-- Create docker
+- Say about documentation
 
+## Missing tests
+- Test inputs
+- Test scrambled_string_finder
+- Integration testing
 
-
+## Execution
 
 ### Requirements
 - Make
 - python3
 - Docker
-
-## Missing tests
-- Test inputs
-- Test the correctness of the algorithm
-- Test scrambled_string_finder
-- Integration testing
-
-## Execution
 
 ### Docker
 - Run the application using docker
