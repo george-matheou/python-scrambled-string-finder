@@ -1,9 +1,8 @@
-.PHONY: tests install lint all
+.PHONY: tests install lint docs all
 
 tests:
-	@echo "================= Testing ================="
-	chmod a+x run_tests.sh
-	./run_tests.sh
+	@echo "======> Testing"
+	@chmod +x run_tests.sh && ./run_tests.sh
 
 install:
 	@echo "======> Installing Requirements"
@@ -14,4 +13,8 @@ lint:
 	@echo "======> Linting using pylint..."
 	@pylint --rcfile=pylintrc --recursive=y . || true
 
-all: install tests lint
+docs:
+	@echo "======> Generating documentation..."
+	@chmod +x generate_docs.sh && ./generate_docs.sh
+
+all: install tests lint docs

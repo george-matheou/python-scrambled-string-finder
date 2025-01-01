@@ -2,3 +2,4 @@ dataclasses_json
 pylint
 pydantic
 pylint-pydantic
+pdoc

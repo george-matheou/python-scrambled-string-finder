@@ -46,8 +46,8 @@ class ScrambledStringFinder:
         inputs = self.input_provider.get()
 
         results = []
-        for case_index, input_string in enumerate(inputs, start=1):
-            result = self._process_input(case_index, input_string)
+        for index, input_string in enumerate(inputs, start=1):
+            result = self._process_input(index, input_string)
             results.append(result)
 
         return results
@@ -58,8 +58,8 @@ class ScrambledStringFinder:
         """
         inputs = self.input_provider.get()
 
-        for case_index, input_string in enumerate(inputs, start=1):
-            result = self._process_input(case_index, input_string)
+        for index, input_string in enumerate(inputs, start=1):
+            result = self._process_input(index, input_string)
             self.logger.always(result)
 
     def _process_input(self, case_index: int, input_string: str) -> str:
@@ -101,7 +101,11 @@ class ScrambledStringFinder:
             # Sliding window to match canonical forms
             for i in range(input_len - word_length + 1):
                 substring = input_string[i: i + word_length]
-                if compute_canonical_form(substring) ==  self.dictionary.get_canonical_word(dict_word):
+                if compute_canonical_form(substring) == self.dictionary.get_canonical_word(dict_word):
+                    self.logger.debug(f"dict_word: {dict_word} | substring: {substring} | "
+                                      f"substring_canonical: {compute_canonical_form(substring)} | "
+                                      f"dict_word_canonical: {self.dictionary.get_canonical_word(dict_word)} "
+                                      )
                     count += 1
                     break # Avoid double-counting for the same word
 
