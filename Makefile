@@ -1,4 +1,4 @@
-.PHONY: tests install lint docs all
+.PHONY: tests install lint docs docker_build all
 
 tests:
 	@echo "======> Testing"
@@ -17,4 +17,8 @@ docs:
 	@echo "======> Generating documentation..."
 	@chmod +x generate_docs.sh && ./generate_docs.sh
 
-all: install tests lint docs
+docker_build:
+	@echo "======> Build docker..."
+	@docker build -t scrambled-string-finder .
+
+all: install tests lint docs docker_build
