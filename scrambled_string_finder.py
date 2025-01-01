@@ -101,7 +101,8 @@ class ScrambledStringFinder:
             # Sliding window to match canonical forms
             for i in range(input_len - word_length + 1):
                 substring = input_string[i: i + word_length]
-                if compute_canonical_form(substring) == self.dictionary.get_canonical_word(dict_word):
+                if (substring == dict_word or
+                        compute_canonical_form(substring) == self.dictionary.get_canonical_word(dict_word)):
                     self.logger.debug(f"dict_word: {dict_word} | substring: {substring} | "
                                       f"substring_canonical: {compute_canonical_form(substring)} | "
                                       f"dict_word_canonical: {self.dictionary.get_canonical_word(dict_word)} "
