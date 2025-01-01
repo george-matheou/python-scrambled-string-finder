@@ -62,3 +62,14 @@ class Logger(ABC):
             message (str): The message to log.
         """
         pass
+
+
+    @abstractmethod
+    def always(self, message: str) -> None:
+        """
+        Logs a message always.
+
+        Args:
+            message (str): The message to log.
+        """
+        pass

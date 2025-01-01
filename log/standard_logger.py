@@ -104,3 +104,7 @@ class StandardLogger(Logger):
     def critical(self, message: str) -> None:
         """Logs a critical message."""
         self._logger.critical(message) # pylint: disable=no-member
+
+    def always(self, message: str) -> None:
+        """Logs a message always."""
+        self._logger.log(100, message)  # Custom log level higher than CRITICAL # pylint: disable=no-member

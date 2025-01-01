@@ -8,50 +8,27 @@ import os.path
 import sys
 from config.config_reader import ConfigReader
 from log.log_config import LogConfig
-from dictionary.dictionary_config import DictionaryConfig
-from config.config_utils import print_config
 from log.standard_logger import StandardLogger
-from dictionary.dictionary_file_provider import DictionaryFileProvider
+from log.logger import Logger
+from dictionary.dictionary_config import DictionaryConfig
+from dictionary.hash_dictionary_storage import HashDictionaryStorage
+from dictionary.set_dictionary_storage import SetDictionaryStorage
+from dictionary.dictionary import Dictionary
 from input_file_provider import InputFileProvider
 from scrambled_string_finder import ScrambledStringFinder
 
-def main():
+
+def check_arguments(args, logger: Logger) -> None:
     """
-    Main function to handle command-line arguments and orchestrate the program flow.
+    Validates the provided command-line arguments.
+
+    Args:
+        args (Namespace): Parsed command-line arguments.
+        logger (Logger): Logger for logging errors.
+
+    Raises:
+        SystemExit: If any of the provided arguments are invalid.
     """
-
-    # Variables
-    config_file = "config.ini"
-
-    # Parse command-line arguments
-    parser = argparse.ArgumentParser(description="Scrambled String Finder")
-    parser.add_argument("--dictionary", required=True, help="Path to the dictionary file.")
-    parser.add_argument("--input", required=True, help="Path to the input file.")
-
-    args = parser.parse_args()
-
-    # Initialize configuration
-    try:
-        config_reader = ConfigReader(config_file)
-        dict_config = config_reader.get_config("DICTIONARY", DictionaryConfig)
-        log_config = config_reader.get_config("LOGGER", LogConfig)
-
-        print_config("DICTIONARY", dict_config)
-        print_config("LOGGER", log_config)
-    except Exception as err:
-        print(f"Error loading configuration: {err}")
-        sys.exit(1)
-
-    # Initialize logging
-    try:
-        logger = StandardLogger(log_config, "scrambled_app")
-    except Exception as err:
-        print(f"Error initializing logger: {err}")
-        sys.exit(1)
-
-    logger.info("Configuration and logging initialized successfully.")
-
-    # Access and check command-line arguments
     dict_file_path = args.dictionary
     input_file_path = args.input
 
@@ -66,18 +43,62 @@ def main():
     logger.info(f"Dictionary file path: {dict_file_path}")
     logger.info(f"Input file path: {input_file_path}")
 
+
+def main():
+    """
+    Main function to handle command-line arguments and orchestrate the program flow.
+    """
+    # Parse command-line arguments
+    parser = argparse.ArgumentParser(description="Scrambled String Finder")
+    parser.add_argument("--dictionary", required=True, help="Path to the dictionary file.")
+    parser.add_argument("--input", required=True, help="Path to the input file.")
+    parser.add_argument("--config", default="config.ini", help="Path to the configuration file (default: config.ini).")
+    parser.add_argument("--storage", choices=["hash", "set"], default="hash",
+                        help="Type of storage to use for the dictionary.")
+
+    args = parser.parse_args()
+    config_file = args.config
+    dict_file_path = args.dictionary
+    input_file_path = args.input
+
+    # Initialize configuration
     try:
-        dictionary_file_provider = DictionaryFileProvider(
-            dictionary_file_path=dict_file_path,
+        config_reader = ConfigReader(config_file)
+        dict_config = config_reader.get_config("DICTIONARY", DictionaryConfig)
+        log_config = config_reader.get_config("LOGGER", LogConfig)
+    except Exception as err:
+        print(f"Error loading configuration: {err}")
+        sys.exit(1)
+
+    # Initialize logging
+    try:
+        logger = StandardLogger(log_config, "scrambled_app")
+    except Exception as err:
+        print(f"Error initializing logger: {err}")
+        sys.exit(1)
+
+    logger.info("Configuration and logging initialized successfully.")
+
+    # Check command line arguments
+    check_arguments(args, logger)
+
+    try:
+        # Select dictionary storage type
+        storage_type = HashDictionaryStorage if args.storage == "hash" else SetDictionaryStorage
+        logger.info(f"Dictionary storage type: {args.storage}")
+
+        dictionary = Dictionary(
+            storage=storage_type(),
             dictionary_config=dict_config,
+            logger=logger
         )
 
-        dictionary_file_provider.load()
-        logger.info(f"Total length of all dictionary words: {dictionary_file_provider.total_length_of_all_words}")
+        dictionary.load_from_file(dict_file_path)
+        logger.info(f"Total length of all dictionary words: {dictionary.total_length_of_all_words}")
 
         print("====================")
-        for key, val in dictionary_file_provider.get().items():
-            print(f"{key} -> {val}")
+        for word in dictionary.get_all_words():
+            print(f"{word} -> {dictionary.get_canonical_word(word)}")
         print("====================")
     except Exception as err:
         logger.error(f"Error loading dictionary: {err}")
@@ -90,10 +111,10 @@ def main():
 
         input_file_provider.load()
 
-        print("====================")
-        for line in input_file_provider.get():
-            print(line)
-        print("====================")
+        # print("====================")
+        # for line in input_file_provider.get():
+        #     print(line)
+        # print("====================")
     except Exception as err:
         logger.error(f"Error loading input file: {err}")
         sys.exit(1)
@@ -101,14 +122,14 @@ def main():
     try:
         scrambled_string_finder = ScrambledStringFinder(
             input_provider=input_file_provider,
-            dictionary_provider=dictionary_file_provider,
+            dictionary=dictionary,
+            logger=logger
         )
 
-        results = scrambled_string_finder.find_scrambled_strings()
-
-        # Output results
-        for result in results:
-            print(result)
+        scrambled_string_finder.output_scrambled_strings()
+        # print("=====================")
+        # for scrambled_string in scrambled_string_finder.find_scrambled_strings():
+        #     print(scrambled_string)
     except Exception as err:
         logger.error(f"Error finding scrambled strings: {err}")
         sys.exit(1)

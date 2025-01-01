@@ -28,7 +28,7 @@ class TestStandardLogger(unittest.TestCase):
 
     @patch("log.standard_logger.logging.getLogger")
     @patch("log.standard_logger.create_parent_directories")
-    def test_singleton_behavior(self, mock_create_parent_dirs, mock_get_logger):
+    def test_singleton_behavior(self, _, mock_get_logger):
         """
         Test that StandardLogger behaves as a singleton.
         """
@@ -58,7 +58,7 @@ class TestStandardLogger(unittest.TestCase):
 
     @patch("log.standard_logger.create_parent_directories")  # Mock directory creation
     @patch("log.standard_logger.logging.getLogger")  # Mock the logger
-    def test_logging_methods(self, mock_get_logger, mock_create_parent_dirs):
+    def test_logging_methods(self, mock_get_logger, _):
         """
         Test that logging methods call the appropriate logger methods.
         """
