@@ -48,6 +48,34 @@ class TestDictionary(unittest.TestCase):
         with self.assertRaises(DictionaryError):
             dictionary.add_word("test")
 
+    def test_large_words_exceeding_length_range(self):
+        """Test that words exceeding the allowed length range raise an error."""
+        storage = HashDictionaryStorage()
+        dictionary = Dictionary(storage, self.config, self.logger)
+
+        # Word too short
+        with self.assertRaises(DictionaryError):
+            dictionary.add_word("a")  # Too short, min_word_length=2
+
+        # Word too long
+        with self.assertRaises(DictionaryError):
+            dictionary.add_word("thisisaverylongword")  # Too long, max_word_length=10
+
+    def test_total_allowed_length_exceeded(self):
+        """Test that adding words whose total length exceeds the limit raises an error."""
+        storage = HashDictionaryStorage()
+        dictionary = Dictionary(storage, self.config, self.logger)
+        allowed_total_length = dictionary.dictionary_config.max_sum_lengths_of_all_words
+        max_word_length = dictionary.dictionary_config.max_word_length
+
+        # Add words within the allowed range
+        for ind in range(int(allowed_total_length/max_word_length)):
+            dictionary.add_word(f"{ind}" * max_word_length)
+
+        # Adding this word exceeds the max_sum_lengths_of_all_words
+        with self.assertRaises(DictionaryError):
+            dictionary.add_word("_" * max_word_length)
+
     @patch("os.path.exists", return_value=True)
     @patch("builtins.open", new_callable=mock_open, read_data="test\nexample\nanother\n")
     def test_load_from_file(self, mock_file, mock_exists):
