@@ -41,7 +41,6 @@ class HashDictionaryStorage(DictionaryDataStorage):
         """
         return word in self.storage
 
-
     def get_all_words(self) -> set[str]:
         """
          Retrieves all original words from the storage.
@@ -50,7 +49,6 @@ class HashDictionaryStorage(DictionaryDataStorage):
              set[str]: A set of all words in the storage.
          """
         return set(self.storage.keys())
-
 
     def get_canonical_word(self, word: str) -> str:
         """
