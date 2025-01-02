@@ -28,7 +28,7 @@ class InputStringsConfig(Config):
     def validate_attributes(self):
         """
         Validates the following:
-            - max_line_length is greater than min_line_length.
+            - max_line_length is greater than or equal to min_line_length.
         """
 
         if self.min_line_length > self.max_line_length:
