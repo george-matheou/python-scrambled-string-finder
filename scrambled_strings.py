@@ -55,7 +55,7 @@ def parse_arguments():
     parser.add_argument("--dictionary", required=True, help="Path to the dictionary file.")
     parser.add_argument("--input", required=True, help="Path to the input file.")
     parser.add_argument("--config", default="config.ini", help="Path to the configuration file (default: config.ini).")
-    parser.add_argument("--storage", choices=["hash", "set"], default="hash",
+    parser.add_argument("--storage", choices=["set", "hash"], default="set",
                         help="Type of storage to use for the dictionary.")
     return parser.parse_args()
 
