@@ -13,19 +13,19 @@ class DictionaryConfig(Config):
     """
 
     min_word_length: int = Field(
-        default=5,
+        default=2,
         ge=1,
         description="Minimum length of dictionary words (must be positive)."
     )
 
     max_word_length: int = Field(
-        default=200,
+        default=105,
         ge=1,
         description="Maximum length of dictionary words (must be positive)."
     )
 
     max_sum_lengths_of_all_words: int = Field(
-        default=200,
+        default=105,
         ge=1,
         description="Maximum sum of all dictionary word lengths (must be positive)."
     )
@@ -34,7 +34,7 @@ class DictionaryConfig(Config):
     def validate_attributes(self):
         """
         Validates the following:
-            - max_word_length is greater than min_word_length.
+            - max_word_length is greater than or equal min_word_length.
             - max_sum_lengths_of_all_words is greater than or equal max_word_length
         """
 

@@ -83,9 +83,9 @@ class TestDictionaryConfig(unittest.TestCase):
     def test_default_values(self):
         """Test that default values are set correctly."""
         config = DictionaryConfig()
-        self.assertEqual(config.min_word_length, 5)
-        self.assertEqual(config.max_word_length, 200)
-        self.assertEqual(config.max_sum_lengths_of_all_words, 200)
+        self.assertEqual(config.min_word_length, 2)
+        self.assertEqual(config.max_word_length, 105)
+        self.assertEqual(config.max_sum_lengths_of_all_words, 105)
 
 
 if __name__ == "__main__":
