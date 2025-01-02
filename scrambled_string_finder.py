@@ -34,7 +34,7 @@ class ScrambledStringFinder:
         self.dictionary = dictionary
         self.logger: Logger = logger
 
-    def find_scrambled_strings(self) ->  List[Tuple[int, int]]:
+    def find_scrambled_strings(self) -> List[Tuple[int, int]]:
         """
         Finds scrambled substrings in the input strings.
 
@@ -47,25 +47,10 @@ class ScrambledStringFinder:
 
         results = []
         for index, input_string in enumerate(inputs, start=1):
-            count = self._process_input(input_string)
+            count = self._count_matches(input_string)
             results.append((index, count))
 
         return results
-
-    def _process_input(self, input_string: str) -> int:
-        """
-        Processes a single input string to find scrambled strings.
-
-        Args:
-            input_string (str): The input string to process.
-
-        Returns:
-            int: The count of matched scrambled words.
-        """
-        if not input_string:
-            return 0
-
-        return self._count_matches(input_string)
 
     def _count_matches(self, input_string: str) -> int:
         """
@@ -80,15 +65,34 @@ class ScrambledStringFinder:
         Returns:
             int: The count of matched scrambled words.
         """
+
+        # If the input string is empty, return 0
+        if not input_string:
+            return 0
+
+        # Local variables
         count = 0
         input_len = len(input_string)
 
         for dict_word in self.dictionary.get_all_words():
             word_length = len(dict_word)
 
-            # Sliding window to match canonical forms
+            # Skip if the dictionary word length exceeds input string length
+            if word_length > input_len:
+                continue
+
+            # Sliding window to match canonical forms. The algorithm iterates through the input string and extracts
+            # substrings of the same length as the dictionary word. This ensures that every potential match
+            # is examined efficiently.
             for i in range(input_len - word_length + 1):
                 substring = input_string[i: i + word_length]
+
+                # The first and last letters of the substring must match those of the dictionary word to satisfy
+                # the scrambling rule. Substrings that fail this check are guaranteed not to match and are
+                # skipped entirely in order to improve performance.
+                if not (dict_word[0] == substring[0] and dict_word[-1] == substring[-1]):
+                    continue
+
                 if ((substring == dict_word) or
                         compute_canonical_form(substring) == self.dictionary.get_canonical_word(dict_word)):
                     self.logger.debug(f"dict_word: {dict_word} | substring: {substring} | "
@@ -96,6 +100,8 @@ class ScrambledStringFinder:
                                       f"dict_word_canonical: {self.dictionary.get_canonical_word(dict_word)} "
                                       )
                     count += 1
-                    break # Avoid double-counting for the same word
+
+                    # Avoid double-counting for the same dictionary word
+                    break
 
         return count
