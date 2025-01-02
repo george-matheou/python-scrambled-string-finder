@@ -15,5 +15,8 @@ python3 -m unittest discover "${verbose}" -s ./utils/tests/ -p "*.py"
 echo "================= Testing dictionary..."
 python3 -m unittest discover "${verbose}" -s ./dictionary/tests/ -p "*.py"
 
+echo "================= Testing input_strings..."
+python3 -m unittest discover "${verbose}" -s ./input_strings/tests/ -p "*.py"
+
 echo "================= Testing app..."
 python3 -m unittest discover "${verbose}" -s ./tests -p "*.py"

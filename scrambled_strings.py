@@ -7,6 +7,8 @@ import argparse
 import os.path
 import sys
 from config.config_reader import ConfigReader
+from input_strings.input_strings_config import InputStringsConfig
+from input_strings.input_file_provider import InputFileProvider
 from log.log_config import LogConfig
 from log.standard_logger import StandardLogger
 from log.logger import Logger
@@ -14,7 +16,6 @@ from dictionary.dictionary_config import DictionaryConfig
 from dictionary.hash_dictionary_storage import HashDictionaryStorage
 from dictionary.set_dictionary_storage import SetDictionaryStorage
 from dictionary.dictionary import Dictionary
-from input_file_provider import InputFileProvider
 from scrambled_string_finder import ScrambledStringFinder
 
 
@@ -74,6 +75,7 @@ def main():
         config_reader = ConfigReader(config_file)
         dict_config = config_reader.get_config("DICTIONARY", DictionaryConfig)
         log_config = config_reader.get_config("LOGGER", LogConfig)
+        input_strings_config = config_reader.get_config("INPUT_STRINGS", InputStringsConfig)
     except Exception as err:
         print(f"Error loading configuration: {err}")
         sys.exit(1)
@@ -108,7 +110,8 @@ def main():
         sys.exit(1)
 
     try:
-        input_file_provider = InputFileProvider(input_file_path)
+        input_file_provider = InputFileProvider(input_file_path=input_file_path,
+                                                input_strings_config=input_strings_config)
         input_file_provider.load()
     except Exception as err:
         logger.error(f"Error loading input file: {err}")

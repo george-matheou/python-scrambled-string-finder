@@ -1,5 +1,5 @@
 """
-Python module that is responsible for managing the dictionary.
+Python module for the configuration of the dictionary.
 """
 
 # Imports
@@ -40,7 +40,7 @@ class DictionaryConfig(Config):
 
         if self.min_word_length > self.max_word_length:
             raise ValueError(f"`max_word_length` ({self.max_word_length}) must be greater "
-                             f"than `min_word_length` ({self.min_word_length}).")
+                             f"than or equal to `min_word_length` ({self.min_word_length}).")
 
         if self.max_word_length > self.max_sum_lengths_of_all_words:
             raise ValueError(

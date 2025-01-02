@@ -7,7 +7,7 @@ in input strings.
 """
 
 from typing import List, Tuple
-from input_provider import InputProvider
+from input_strings.input_provider import InputProvider
 from dictionary.dictionary import Dictionary
 from dictionary.dictionary_utils import compute_canonical_form
 from log.logger import Logger
@@ -41,7 +41,7 @@ class ScrambledStringFinder:
         Returns:
                 List[Tuple[int, int]]: A list of tuples where each tuple contains:
                     - The index of the input string (1-based).
-                    The count of matched dictionary words (including scrambled versions).
+                    - The count of matched dictionary words (including scrambled versions).
         """
         inputs = self.input_provider.get()
 
@@ -89,7 +89,7 @@ class ScrambledStringFinder:
             # Sliding window to match canonical forms
             for i in range(input_len - word_length + 1):
                 substring = input_string[i: i + word_length]
-                if (substring == dict_word or
+                if ((substring == dict_word) or
                         compute_canonical_form(substring) == self.dictionary.get_canonical_word(dict_word)):
                     self.logger.debug(f"dict_word: {dict_word} | substring: {substring} | "
                                       f"substring_canonical: {compute_canonical_form(substring)} | "

@@ -32,7 +32,7 @@ class TestDictionaryConfig(unittest.TestCase):
                 max_sum_lengths_of_all_words=50,
             )
         self.assertIn(
-            "`max_word_length` (10) must be greater than `min_word_length` (15).",
+            "`max_word_length` (10) must be greater than or equal to `min_word_length` (15).",
             str(context.exception),
         )
 

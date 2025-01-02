@@ -1,12 +1,10 @@
 # pepperstone_code_challenge
 
 - Fix printing of the output?
-- Limits for input strings?
 - Say about linting
-- Say about documentation
+- Say about documentation (docs)
 
 ## Missing tests
-- Test inputs
 - Test scrambled_string_finder
 - Integration testing
 
