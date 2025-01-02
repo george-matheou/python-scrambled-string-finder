@@ -84,7 +84,7 @@ class Dictionary:
 
                 # Skip empty words
                 if not word:
-                    self.logger.warning(f"Empty line detected in {dictionary_file_path}. Skipping...")
+                    self.logger.warning(f"Empty word detected in {dictionary_file_path}. Skipping...")
                     continue
 
                 self.add_word(word)
