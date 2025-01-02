@@ -81,22 +81,23 @@ options:
 ```
 
 #### Docker
-- Run the application using docker
-    ```bash
-        docker run --rm -it \
-        -v $(pwd)/examples:/app/input_files \
-        -v $(pwd)/config.ini:/app/input_files/config.ini \
-        scrambled-string-finder \
-        --dictionary /app/input_files/dict.txt \
-        --input /app/input_files/input.txt \
-        --config /app/input_files/config.ini
-    ```
---------
+##### Step 1: Build the Docker image
+```bash
+make docker_build
+```
 
-- Say about linting
-- Say about documentation (docs)
+##### Step 2: Run the application using docker
+```bash
+docker run --rm -it \
+-v $(pwd)/examples:/app/input_files \
+-v $(pwd)/config.ini:/app/input_files/config.ini \
+scrambled-string-finder \
+--dictionary /app/input_files/dict.txt \
+--input /app/input_files/input.txt \
+--config /app/input_files/config.ini
+```
 
-## Future Work
-- Parallel processing
-- Functionality for large input files
-- CI/CD
+## Testing
+## Linting
+## Documentation
+## Design Concepts
