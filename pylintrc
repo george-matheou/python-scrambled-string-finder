@@ -5,7 +5,10 @@ ignore=.venv,docs
 disable=
     W0107,
     R0903,
-    W0718
+    W0718,
+
+[DESIGN]
+max-locals=40
 
 [FORMAT]
 # Maximum number of characters on a single line.
