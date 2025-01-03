@@ -50,3 +50,4 @@ wheels/
 .installed.cfg
 *.egg
 /tmp_code/
+/confidential/
